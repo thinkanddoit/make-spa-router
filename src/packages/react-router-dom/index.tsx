@@ -1,40 +1,31 @@
-import React, { useEffect } from "react";
-import { RouterProvider, useRouterDispatch, useRouterState } from "./context";
+import usePath from "./hooks/usePath";
 
+/**
+ * Route는 단순히 component를 Render하는 역할만 합니다.
+ * path parameter는 Routes에서 사용됩니다.
+ */
 interface RouterProps {
-  children: React.ReactNode;
+  children: any;
 }
 export const Router = ({ children }: RouterProps) => {
-  const BASE_PATH = window.location.pathname;
+  const currentPath = usePath();
   return (
-    <RouterProvider basePath={BASE_PATH}>
-      <PopstateHandler />
-      {children}
-    </RouterProvider>
+    <>
+      {children.map((router: any) => {
+        if (router.props.path == currentPath) return router;
+      })}
+    </>
   );
 };
 
-const PopstateHandler = () => {
-  const dispath = useRouterDispatch();
-
-  useEffect(() => {
-    window.onpopstate = function (event) {
-      if (history.state)
-        dispath({ type: "CHANGE_PATH", path: history.state.path });
-      else dispath({ type: "CHANGE_PATH", path: window.location.pathname });
-    };
-  }, []);
-
-  return null;
-};
-
+/**
+ * Route는 단순히 component를 Render하는 역할만 합니다.
+ * path parameter는 Routes에서 사용됩니다.
+ */
 interface RouteProps {
   path: string;
   component: React.ReactNode;
 }
-export const Route = ({ path, component }: RouteProps) => {
-  const { path: currentPath } = useRouterState();
-  if (path == currentPath) return <>{component}</>;
-
-  return null;
+export const Route = ({ component }: RouteProps) => {
+  return <>{component}</>;
 };
