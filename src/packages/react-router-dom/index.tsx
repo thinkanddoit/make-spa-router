@@ -1,3 +1,4 @@
+import React from "react";
 import usePath from "./hooks/usePath";
 
 /**
@@ -5,13 +6,13 @@ import usePath from "./hooks/usePath";
  * path parameter는 Routes에서 사용됩니다.
  */
 interface RouterProps {
-  children: any;
+  children: React.ReactElement<RouteProps>[];
 }
 export const Router = ({ children }: RouterProps) => {
   const currentPath = usePath();
   return (
     <>
-      {children.map((router: any) => {
+      {children?.map((router: React.ReactElement<RouteProps>) => {
         if (router.props.path == currentPath) return router;
       })}
     </>
